@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 from datetime import date
 from optparse import OptionParser, make_option
 from urllib2 import urlopen
@@ -133,7 +131,7 @@ def main():
 
     try:
         logger.debug('Grabbing API keys.')
-        meetup_key, meetup_group, twAPI personal_handle = grab_api()
+        meetup_key, meetup_group, twAPI, personal_handle = grab_api()
     except Exception, e:
         logger.exception('Twitter API grab error: %s' % e)
         return
@@ -155,7 +153,7 @@ def main():
     twitter_handles = parse_member_twitter(members_json_list)
     logger.debug('Found %d members with twitter handles.' % len(twitter_handles))
 
-    twitter_log = 'twitter_IFTTT.log'
+    twitter_log = '/Users/lynnroot/MyDev/IfMeetThenTweet/logs/twitter_IFTTT.log'
     try:
         logger.debug('Attempting to tweet new members.')
         tweet_people(twAPI, twitter_handles, twitter_log, personal_handle)
