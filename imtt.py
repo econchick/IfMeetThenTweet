@@ -28,10 +28,10 @@ logger.addHandler(file_log)
 logger.addHandler(console_log)
 
 
-def tweet_people(twitter_api, twitter_handles, twitter_log):
+def tweet_people(twitter_api, twitter_handles, twitter_log, personal_handle):
     """Tweets users that are new members to the meetup group."""
     already_msg = []
-    already_msg.append('@PyLadiesSF')  # don't reply to myself
+    already_msg.append(personal_handle)  # don't reply to myself
 
     fp = open(twitter_log, 'r')
     for handle in fp.readlines():
@@ -115,8 +115,9 @@ def grab_api():
                         consumer_secret=k.TWITTER_CONSUMER_SECRET,
                         access_token_key=k.TWITTER_ACCESS_TOKEN,
                         access_token_secret=k.TWITTER_ACCESS_TOKEN_SECRET)
+    personal_handle = k.TWITTER_HANDLE
 
-    return meetup_key, meetup_group, twAPI
+    return meetup_key, meetup_group, twAPI, personal_handle
 
 
 def main():
@@ -132,7 +133,7 @@ def main():
 
     try:
         logger.debug('Grabbing API keys.')
-        meetup_key, meetup_group, twAPI = grab_api()
+        meetup_key, meetup_group, twAPI personal_handle = grab_api()
     except Exception, e:
         logger.exception('Twitter API grab error: %s' % e)
         return
@@ -157,7 +158,7 @@ def main():
     twitter_log = 'twitter_IFTTT.log'
     try:
         logger.debug('Attempting to tweet new members.')
-        tweet_people(twAPI, twitter_handles, twitter_log)
+        tweet_people(twAPI, twitter_handles, twitter_log, personal_handle)
     except Exception, e:
         logger.exception('Twitter API/tweeting error: %s' % e)
 
